@@ -1,29 +1,10 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Oct 29 18:29:40 2021
-
-@author: isaachorwitz
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Oct 29 16:57:04 2021
-
-@author: isaachorwitz
-"""
+#credit to @inh2102
 
 import requests
 import threading
 import random
-import logging
 import time
-logging.basicConfig(filename='log'+str(round(time.time())),
-                            filemode='a',
-                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                            datefmt='%H:%M:%S',
-                            level=logging.INFO)
+
 url = 'https://www.truthsocial.com/'
 
 first_names = open('names.txt','r').read().split('\n')
@@ -48,7 +29,7 @@ def do_request():
         
         if "Thanks" in response:
             msg = "Success with"+" "+str(first)+" "+str(last)+" "+str(email)
-            logging.info(msg)
+            print(msg)
             
 threads = []
 
