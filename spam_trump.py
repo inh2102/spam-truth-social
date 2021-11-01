@@ -1,10 +1,15 @@
-#credit to @inh2102
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 29 16:57:04 2021
+@authors: isaachorwitz, HiddenToad
+"""
 
 import requests
 import threading
 import random
-import time
 import logging
+import time
 
 logging.basicConfig(filename='log'+str(round(time.time())),
                             filemode='a',
