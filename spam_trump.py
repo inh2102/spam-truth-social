@@ -22,7 +22,7 @@ domains = ['gmail.com','yahoo.com','hotmail.com','icloud.com','aol.com',
            'comcast.net','outlook.com','sbcglobal.net','msn.com']
 proxylist = open('proxies.txt','r').read().split('\n')
 def do_request():
-    for i in range(100):
+    for i in range(1000000):
         proxy = {'http': random.choice(proxylist)}
         first = random.choice(first_names)
         last = random.choice(last_names)
