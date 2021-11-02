@@ -5,11 +5,13 @@ Created on Fri Oct 29 16:57:04 2021
 @authors: isaachorwitz, HiddenToad
 """
 
+from __future__ import print_function
 import requests
 import threading
 import random
 import logging
 import time
+import sys
 
 logging.basicConfig(filename='log'+str(round(time.time())),
                             filemode='a',
@@ -50,7 +52,8 @@ def do_request():
             with mutex:
                 itercount += 1
                 if itercount % 50 == 0:
-                    print(f"{itercount} names sent...")
+                    print(f"    {itercount} names sent...",end='\r',flush=True)
+                    sys.stdout.flush()
             logging.info("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
             
 threads = []
