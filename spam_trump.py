@@ -60,7 +60,7 @@ def do_request():
         proxy = {'http': random.choice(proxylist)}
         first = random.choice(first_names)
         last = random.choice(last_names)
-        email = first+random.choice(['-','.','_'])+last+"@"+random.choice(domains)
+        email = first.lower()+random.choice(['-','.','_',''])+last.lower()+"@"+random.choice(domains)
 
         data = {
         'first_name': first,
