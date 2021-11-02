@@ -90,8 +90,8 @@ try:
         threads[i].join()
 
 except KeyboardInterrupt:
-    print("\n\nRecieved KeyboardInterrupt. Exiting...")
+    print("\n\nReceived KeyboardInterrupt. Exiting...")
     sys.exit(0)
 
 except (ConnectionError, gaierror, NewConnectionError, ProxyError):
-    print("\nrecieved connection error. continuing...")
+    print("\n\nReceived connection error. continuing...")
