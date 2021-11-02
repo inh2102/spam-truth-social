@@ -13,6 +13,14 @@ import logging
 import sys
 import asyncio
 
+#for exception handling###########################
+from socket import gaierror
+from urllib3.exceptions import NewConnectionError
+from requests.exceptions import ProxyError
+from requests.exceptions import ConnectionError
+##################################################
+
+
 logger = logging.getLogger('spam_log')
 fh = logging.FileHandler('spam_log')
 fh.setLevel(logging.INFO)
@@ -38,6 +46,7 @@ def do_request():
     global itercount
     proxy = {}
     first = last = email = ""
+    
     async def logAndPrint():
         global itercount
         with mutex:
@@ -53,7 +62,6 @@ def do_request():
         last = random.choice(last_names)
         email = first+random.choice(['-','.','_'])+last+"@"+random.choice(domains)
 
-
         data = {
         'first_name': first,
         'last_name': last,
@@ -61,6 +69,7 @@ def do_request():
         'phone': '',
         'offers': 'on'
        }
+
         response = requests.post(url,data=data,proxies=proxy).text
         
         if "Thanks" in response:
@@ -79,6 +88,10 @@ try:
 
     for i in range(50):
         threads[i].join()
+
 except KeyboardInterrupt:
     print("\n\nRecieved KeyboardInterrupt. Exiting...")
     sys.exit(0)
+
+except (ConnectionError, gaierror, NewConnectionError, ProxyError):
+    print("\nrecieved connection error. continuing...")
