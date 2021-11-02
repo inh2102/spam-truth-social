@@ -15,7 +15,7 @@ import sys
 logger = logging.getLogger('spam_log')
 fh = logging.FileHandler('spam_log')
 fh.setLevel(logging.INFO)
-formatter = logging.Formatter("%(asctime)s;%(message)s",
+formatter = logging.Formatter("%(asctime)s: %(message)s",
                               "%Y-%m-%d %H:%M:%S")
 fh.setFormatter(formatter)
 logger.addHandler(fh)
@@ -53,17 +53,21 @@ def do_request():
                 if itercount % 50 == 0:
                     print(f"    {itercount} names sent...",end='\r',flush=True)
                     sys.stdout.flush()
-            logger.warning("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
+            logger.warning("Success with"+" "+str(first)+" "+str(last)+", "+str(email)+", "+proxy['http'])
             
 threads = []
 
-for i in range(50):
-    t = threading.Thread(target=do_request)
-    t.daemon = True
-    threads.append(t)
-    
-for i in range(50):
-    threads[i].start()
+try:
+    for i in range(50):
+        t = threading.Thread(target=do_request)
+        t.daemon = True
+        threads.append(t)
+        
+    for i in range(50):
+        threads[i].start()
 
-for i in range(50):
-    threads[i].join()
+    for i in range(50):
+        threads[i].join()
+except KeyboardInterrupt:
+    print("\n\nRecieved KeyboardInterrupt. Exiting...")
+    sys.exit(0)
