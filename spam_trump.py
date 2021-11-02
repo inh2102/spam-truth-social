@@ -53,7 +53,7 @@ def do_request():
                 if itercount % 50 == 0:
                     print(f"    {itercount} names sent...",end='\r',flush=True)
                     sys.stdout.flush()
-            logger.warn("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
+            logger.warning("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
             
 threads = []
 
