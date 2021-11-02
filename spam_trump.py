@@ -11,6 +11,7 @@ import threading
 import random
 import logging
 import sys
+import asyncio
 
 logger = logging.getLogger('spam_log')
 fh = logging.FileHandler('spam_log')
@@ -31,13 +32,28 @@ proxylist = open('proxies.txt','r').read().split('\n')
 itercount = 0
 mutex = threading.Lock()
 
+
+
 def do_request():
     global itercount
-    for i in range(1000000):
+    proxy = {}
+    first = last = email = ""
+    async def logAndPrint():
+        global itercount
+        with mutex:
+            itercount += 1
+            if itercount % 50 == 0:
+                print(f"    {itercount} names sent...",end='\r',flush=True)
+                sys.stdout.flush()
+        logger.warning("Success with"+" "+str(first)+" "+str(last)+", "+str(email)+", "+proxy['http'])
+
+    for i in range(100000):
         proxy = {'http': random.choice(proxylist)}
         first = random.choice(first_names)
         last = random.choice(last_names)
         email = first+random.choice(['-','.','_'])+last+"@"+random.choice(domains)
+
+
         data = {
         'first_name': first,
         'last_name': last,
@@ -48,12 +64,7 @@ def do_request():
         response = requests.post(url,data=data,proxies=proxy).text
         
         if "Thanks" in response:
-            with mutex:
-                itercount += 1
-                if itercount % 50 == 0:
-                    print(f"    {itercount} names sent...",end='\r',flush=True)
-                    sys.stdout.flush()
-            logger.warning("Success with"+" "+str(first)+" "+str(last)+", "+str(email)+", "+proxy['http'])
+            asyncio.run(logAndPrint())
             
 threads = []
 
