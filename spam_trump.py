@@ -10,18 +10,17 @@ import requests
 import threading
 import random
 import logging
-import time
 import sys
 
-logging.basicConfig(filename='log'+str(round(time.time())),
-                            filemode='a',
-                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                            datefmt='%H:%M:%S',
-                            level=logging.INFO)
+logger = logging.getLogger('spam_log')
+fh = logging.FileHandler('spam_log')
+fh.setLevel(logging.INFO)
+formatter = logging.Formatter("%(asctime)s;%(message)s",
+                              "%Y-%m-%d %H:%M:%S")
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 url = 'https://www.truthsocial.com/'
-
-
 
 first_names = open('names.txt','r').read().split('\n')
 last_names = [x.title() for x in open('last_names.txt','r').read().split('\n')]
@@ -54,7 +53,7 @@ def do_request():
                 if itercount % 50 == 0:
                     print(f"    {itercount} names sent...",end='\r',flush=True)
                     sys.stdout.flush()
-            logging.info("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
+            logger.warn("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
             
 threads = []
 
