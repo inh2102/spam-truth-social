@@ -26,7 +26,12 @@ last_names = [x.title() for x in open('last_names.txt','r').read().split('\n')]
 domains = ['gmail.com','yahoo.com','hotmail.com','icloud.com','aol.com',
            'comcast.net','outlook.com','sbcglobal.net','msn.com']
 proxylist = open('proxies.txt','r').read().split('\n')
+
+itercount = 0
+mutex = threading.Lock()
+
 def do_request():
+    global itercount
     for i in range(1000000):
         proxy = {'http': random.choice(proxylist)}
         first = random.choice(first_names)
@@ -42,7 +47,10 @@ def do_request():
         response = requests.post(url,data=data,proxies=proxy).text
         
         if "Thanks" in response:
-            print("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
+            with mutex:
+                itercount += 1
+                if itercount % 50 == 0:
+                    print(f"{itercount} names sent...")
             logging.info("Success with"+" "+str(first)+" "+str(last)+" "+str(email)+" "+proxy['http'])
             
 threads = []
