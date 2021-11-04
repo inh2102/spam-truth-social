@@ -70,7 +70,7 @@ def do_request():
         'offers': 'on'
        }
 
-        response = requests.post(url,data=data,proxies=proxy).text
+        response = requests.post(url,data=data).text
         
         if "Thanks" in response:
             asyncio.run(logAndPrint())
